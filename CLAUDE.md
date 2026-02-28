@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-**mkdox** — Bash wrapper for MkDocs Material via Docker. Manages creation, serving, building, and content management of documentation sites.
+**mkdox** — Bash wrapper for Zensical/Material via Docker. Manages creation, serving, building, and content management of documentation sites.
 
 Built on the **bashew** framework (pforret/bashew). Single-script architecture: `mkdox.sh` (~1370 lines).
 
@@ -39,14 +39,15 @@ shellcheck mkdox.sh
 ### Key patterns
 
 - **Namespaced functions**: `IO:print`, `Str:slugify`, `Os:require`, etc.
-- **Docker for heavy lifting**: `serve` and `build` run MkDocs inside `pforret/mkdox-material-derived` container
+- **Docker for heavy lifting**: `serve` and `build` run Zensical inside `pforret/mkdox-zensical` container
 - **Template system**: `templates/simple/` and `templates/with_blog/` use `{PLACEHOLDER}` variables substituted via awk
+- **Config detection**: prefers `zensical.toml` (TOML), falls back to `mkdocs.yml` (YAML) for backward compatibility
 - **Strict mode**: `set -uo pipefail` with trap-based error reporting
 - **.env override**: Environment variables in `.env` override all option defaults
 
 ### Docker image
 
-The Docker image `pforret/mkdox-material-derived` (extends `squidfunk/mkdocs-material` with plugins) is managed in `docker/`. Shares the repo-level `VERSION.md` version.
+The Docker image `pforret/mkdox-zensical` (extends `zensical/zensical` with third-party plugins) is managed in `docker/`. Shares the repo-level `VERSION.md` version.
 
 - `docker/Dockerfile` — image definition
 - `docker/push_docker.sh` — build and push to Docker Hub

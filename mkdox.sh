@@ -12,7 +12,7 @@ script_version="0.0.1" # if there is a VERSION.md in this script's folder, that 
 readonly script_author="peter@forret.com"
 readonly script_created="2024-01-09"
 readonly run_as_root=-1 # run_as_root: 0 = don't check anything / 1 = script MUST run as root / -1 = script MAY NOT run as root
-readonly script_description="easy wrapper for Material Mkdocs in Docker mode"
+readonly script_description="easy wrapper for Zensical/Material in Docker mode"
 ## some initialisation
 action=""
 git_repo_remote=""
@@ -46,7 +46,7 @@ flag|T|TREE|list as tree (for mkdox toc)
 flag|X|EXPORT|export to PDF (for mkdox build)
 option|l|log_dir|folder for log files |$HOME/log/$script_prefix
 option|t|tmp_dir|folder for temp files|/tmp/$script_prefix
-option|D|DOCKER|docker image to use|pforret/mkdox-material-derived
+option|D|DOCKER|docker image to use|pforret/mkdox-zensical
 option|E|TITLE|set site title|
 option|H|HISTORY|days to take into account for mkdox recent|7
 option|L|LENGTH|max commit message length|99
@@ -70,17 +70,17 @@ function Script:main() {
 
   case "${action,,}" in
   new)
-    #TIP: use «$script_prefix new» to create new Mkdocs Material project
+    #TIP: use «$script_prefix new» to create new Zensical project
     #TIP:> $script_prefix new <name>
     docker -v &>/dev/null || IO:die "Docker is not installed or not yet started"
     docker ps &>/dev/null || IO:die "Docker is not yet started"
     local folder="${input:-.}"
-    IO:announce "Create new Mkdocs Material project in $folder"
+    IO:announce "Create new Zensical project in $folder"
     [[ ! -d "$folder" ]] && mkdir "$folder"
     [[ ! -d "$folder/docs" ]] && mkdir "$folder/docs"
-    IO:print "Run 'mkdocs new' via Docker"
+    IO:print "Run 'zensical new' via Docker"
     # shellcheck disable=SC2154
-    docker run --platform linux/amd64 --rm -it --user "$(id -u)":"$(id -g)" -v "${PWD}":/docs "$DOCKER" new "$folder" 2>/dev/null || IO:die "Could not create new Mkdocs project"
+    docker run --platform linux/amd64 --rm -it --user "$(id -u)":"$(id -g)" -v "${PWD}":/docs "$DOCKER" new "$folder" 2>/dev/null || IO:die "Could not create new Zensical project"
     local folder_path project_name project_title site_name template_folder
     folder_path="$(cd "$folder" && pwd)"
     project_name="$(basename "$folder_path")"
@@ -105,7 +105,7 @@ function Script:main() {
           file="${template//\.\//}"
           extension="${file##*.}"
           actual="$folder_path/$file"
-          if [[ "$extension" == "md" || "$extension" == "pre" || "$extension" == "post" || "$extension" == "yml" ]]; then
+          if [[ "$extension" == "md" || "$extension" == "pre" || "$extension" == "post" || "$extension" == "yml" || "$extension" == "toml" ]]; then
              IO:print "Create $file ..."
             CREATION_DATE="$(date '+%Y-%m-%d')"
             CREATION_YEAR="$(date '+%Y')"
@@ -150,14 +150,14 @@ function Script:main() {
       fi
     fi
 
-    IO:success "New Mkdocs Material project created in '$folder'"
+    IO:success "New Zensical project created in '$folder'"
     if [[ $folder == "." ]] ; then
       IO:print "* You can now edit the docs in 'docs'"
-      IO:print "* You can now edit the settings/look in 'mkdocs.yml'"
+      IO:print "* You can now edit the settings/look in 'zensical.toml'"
       IO:print "* To preview the site, run 'mkdox serve'"
     else
       IO:print "* You can now edit the docs in '$folder/docs'"
-      IO:print "* You can now edit the settings/look in '$folder/mkdocs.yml'"
+      IO:print "* You can now edit the settings/look in '$folder/zensical.toml'"
       IO:print "* To preview the site, run 'cd \"$folder\" && mkdox serve'"
     fi
 
@@ -186,9 +186,18 @@ function Script:main() {
 
       popd >/dev/null || IO:die "Can't return to original folder"
     fi
-    IO:announce "Build Mkdocs Material site: $(basename "$PWD")"
+    IO:announce "Build Zensical site: $(basename "$PWD")"
+    local config_args=()
+    if [[ -f zensical.toml ]]; then
+      IO:debug "Using zensical.toml"
+    elif [[ -f mkdocs.yml ]]; then
+      IO:debug "Falling back to mkdocs.yml"
+      config_args=("--config-file" "mkdocs.yml")
+    else
+      IO:die "No zensical.toml or mkdocs.yml found"
+    fi
     # shellcheck disable=SC2154
-    docker run --platform linux/amd64 --rm -it -e ENABLE_PDF_EXPORT="$EXPORT" -v "${PWD}":/docs "$DOCKER" build
+    docker run --platform linux/amd64 --rm -it -v "${PWD}":/docs "$DOCKER" build "${config_args[@]}"
 
     if [[ ! -d .git ]]; then
       IO:debug "No .git folder detected - skipping git commit/push"
@@ -200,7 +209,8 @@ function Script:main() {
     fi
     local git_message
     git add docs/
-    git add mkdocs.yml
+    [[ -f mkdocs.yml ]] && git add mkdocs.yml
+    [[ -f zensical.toml ]] && git add zensical.toml
     git add site/
     # shellcheck disable=SC2153
     git_message="$(git status --porcelain | grep -v 'site/' | grep -v VERSION.md | awk '{ gsub("docs/",""); print $2"("$1") - "}' | tr "\n" " "  | cut "-c1-$LENGTH")"
@@ -218,8 +228,17 @@ function Script:main() {
     [[ ! -d docs ]] && IO:die "No 'docs' folder found in $(realpath "$PWD")"
     docker -v >/dev/null || IO:die "Docker is not installed or not yet started" # works for WSL, but not for macOS
     docker ps &>/dev/null || IO:die "Docker is not yet started" # works for macOS
-    IO:debug "Start Mkdocs Material server on port '$PORT'"
+    IO:debug "Start Zensical server on port '$PORT'"
     [[ -z "$PORT" ]] && PORT="$(derive_port)"
+    local config_args=()
+    if [[ -f zensical.toml ]]; then
+      IO:debug "Using zensical.toml"
+    elif [[ -f mkdocs.yml ]]; then
+      IO:debug "Falling back to mkdocs.yml"
+      config_args=("--config-file" "mkdocs.yml")
+    else
+      IO:die "No zensical.toml or mkdocs.yml found"
+    fi
     (
       IO:countdown "$SECS" "Open http://localhost:$PORT ($os_name) ..."
       if [[ -n $(command -v explorer.exe) ]]; then
@@ -240,7 +259,7 @@ function Script:main() {
       fi
 
     ) &
-    docker run --platform linux/amd64 --rm -it -p "$PORT":8000 -v "${PWD}":/docs "$DOCKER"
+    docker run --platform linux/amd64 --rm -it -p "$PORT":8000 -v "${PWD}":/docs "$DOCKER" serve --dev-addr=0.0.0.0:8000 "${config_args[@]}"
     ;;
 
   images)
@@ -265,7 +284,9 @@ function Script:main() {
 
   post)
     local blog_folder="docs/blog"
-    if [[ -f mkdocs.yml ]]; then
+    if [[ -f zensical.toml ]]; then
+      grep <zensical.toml -q 'blog_dir' && blog_folder="docs/$(awk -F'"' '/blog_dir/ {print $2}' zensical.toml)"
+    elif [[ -f mkdocs.yml ]]; then
       grep <mkdocs.yml -q 'blog_dir:' && blog_folder="docs/$(awk '/blog_dir:/ {print $2}' mkdocs.yml)"
     fi
     IO:debug "Blog folder: $blog_folder"
