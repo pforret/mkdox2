@@ -37,7 +37,7 @@ flag|h|help|show usage
 flag|q|quiet|no output
 flag|v|verbose|also show debug messages
 flag|f|force|do not ask for confirmation (always yes)
-flag|B|BLOG|use blog-enabled template for mkdox new
+option|B|TEMPLATE|template to use for mkdox new|
 flag|G|GITPUSH|push to git after commit
 flag|I|INDEX|build index.md if index.pre/.post present (for mkdox build)
 flag|Q|SHORT|include short contents of page (for mkdox toc)
@@ -51,8 +51,8 @@ option|E|TITLE|set site title|
 option|H|HISTORY|days to take into account for mkdox recent|7
 option|L|LENGTH|max commit message length|99
 option|P|PORT|http port for serve|
-option|S|SECS|seconds to wait for launching a browser|10
-choice|1|action|action to perform|new,serve,post,images,build,recent,toc,check,env,update
+option|S|SECS|seconds to wait for launching a browser|5
+choice|1|action|action to perform|new,serve,post,blog,images,build,recent,toc,check,env,update
 param|?|input|input folder name
 param|?|output|output file name
 " -v -e '^#' -e '^\s*$'
@@ -72,8 +72,7 @@ function Script:main() {
   new)
     #TIP: use «$script_prefix new» to create new Zensical project
     #TIP:> $script_prefix new <name>
-    docker -v &>/dev/null || IO:die "Docker is not installed or not yet started"
-    docker ps &>/dev/null || IO:die "Docker is not yet started"
+    Docker:require_running
     local folder="${input:-.}"
     IO:announce "Create new Zensical project in $folder"
     [[ ! -d "$folder" ]] && mkdir "$folder"
@@ -81,18 +80,40 @@ function Script:main() {
     IO:print "Run 'zensical new' via Docker"
     # shellcheck disable=SC2154
     docker run --platform linux/amd64 --rm -it --user "$(id -u)":"$(id -g)" -v "${PWD}":/docs "$DOCKER" new "$folder" 2>/dev/null || IO:die "Could not create new Zensical project"
+    # remove files created by 'zensical new' that we don't need
+    [[ -f "$folder/.github/workflows/docs.yml" ]] && rm "$folder/.github/workflows/docs.yml"
+    [[ -d "$folder/.github/workflows" ]] && rmdir "$folder/.github/workflows" 2>/dev/null
+    [[ -d "$folder/.github" ]] && rmdir "$folder/.github" 2>/dev/null
+    [[ -f "$folder/mkdocs.yml" ]] && rm "$folder/mkdocs.yml"
     local folder_path project_name project_title site_name template_folder
     folder_path="$(cd "$folder" && pwd)"
     project_name="$(basename "$folder_path")"
     site_name="$project_name.test"
-    repo_url="$(cd $folder_path && git config --get remote.origin.url 2>/dev/null || true)"
+    repo_url="$(cd "$folder_path" && git config --get remote.origin.url 2>/dev/null)" || repo_url=""
     project_title="$project_name Docs"
     [[ -n "$TITLE" ]] && project_title="$TITLE"
-    template_folder="$script_install_folder/templates/simple/"
-    if ((BLOG)); then
-      template_folder="${script_install_folder}/templates/with_blog/"
-      IO:print "Use blog-enabled template"
+    # shellcheck disable=SC2153
+    if [[ -z "$TEMPLATE" ]]; then
+      IO:print "Available templates:"
+      local i=0 template_list=()
+      for tdir in "$script_install_folder"/templates/*/; do
+        tname="$(basename "$tdir")"
+        template_list+=("$tname")
+        i=$((i + 1))
+        IO:print "  $i) $tname"
+      done
+      [[ ${#template_list[@]} -eq 0 ]] && IO:die "No templates found in $script_install_folder/templates/"
+      local choice
+      read -r -p "Pick a template [1-${#template_list[@]}] > " choice
+      if [[ "$choice" -ge 1 && "$choice" -le ${#template_list[@]} ]] 2>/dev/null; then
+        TEMPLATE="${template_list[$((choice - 1))]}"
+      else
+        IO:die "Invalid choice: $choice"
+      fi
     fi
+    template_folder="$script_install_folder/templates/$TEMPLATE/"
+    [[ ! -d "$template_folder" ]] && IO:die "Template '$TEMPLATE' not found in $script_install_folder/templates/"
+    IO:print "Use template: $TEMPLATE"
 
     (
       cd "$template_folder" || exit
@@ -166,7 +187,7 @@ function Script:main() {
   build)
     #TIP: use «$script_prefix build» to create static HTML site in _site folder
     #TIP:> $script_prefix build
-    docker -v >/dev/null || IO:die "Docker is not installed or not yet started"
+    Docker:require_running
     [[ ! -d docs ]] && IO:die "No 'docs' folder found in $(realpath "$PWD")"
     if ((INDEX)); then
       # create the index.md file in any folder that has a index.pre or index.post file
@@ -180,7 +201,12 @@ function Script:main() {
         while read -r folder; do
           IO:print "Create index.md for $folder ..."
           pushd "$folder" >/dev/null || exit
-          mkdox -R -T toc . index.md
+          if [[ "$folder" == *blog* ]]; then
+            IO:debug "Blog folder detected — using date-sorted listing"
+            mkdox -R -Q toc . index.md
+          else
+            mkdox -R -T toc . index.md
+          fi
           popd >/dev/null || exit
         done
 
@@ -226,8 +252,7 @@ function Script:main() {
     #TIP: use «$script_prefix serve» to start local website server (for preview)
     #TIP:> $script_prefix serve
     [[ ! -d docs ]] && IO:die "No 'docs' folder found in $(realpath "$PWD")"
-    docker -v >/dev/null || IO:die "Docker is not installed or not yet started" # works for WSL, but not for macOS
-    docker ps &>/dev/null || IO:die "Docker is not yet started" # works for macOS
+    Docker:require_running
     IO:debug "Start Zensical server on port '$PORT'"
     [[ -z "$PORT" ]] && PORT="$(derive_port)"
     local config_args=()
@@ -314,6 +339,110 @@ function Script:main() {
     IO:success "New post created: $post_file"
 
     ;;
+  blog)
+    #TIP: use «$script_prefix blog» to generate blog index from posts in docs/blog/posts/
+    #TIP:> $script_prefix blog
+    local blog_folder="docs/blog"
+    if [[ -f zensical.toml ]]; then
+      grep <zensical.toml -q 'blog_dir' && blog_folder="docs/$(awk -F'"' '/blog_dir/ {print $2}' zensical.toml)"
+    elif [[ -f mkdocs.yml ]]; then
+      grep <mkdocs.yml -q 'blog_dir:' && blog_folder="docs/$(awk '/blog_dir:/ {print $2}' mkdocs.yml)"
+    fi
+    local posts_folder="$blog_folder/posts"
+    [[ ! -d "$posts_folder" ]] && IO:die "No posts folder found: $posts_folder"
+    local blog_index="$blog_folder/index.md"
+    IO:announce "Generate blog index: $blog_index"
+    {
+      echo "# Blog"
+      echo ""
+      find "$posts_folder" -maxdepth 1 -type f -name '*.md' |
+        sed 's|^.*/||' |
+        sort -r |
+        head -10 |
+        while read -r post_name; do
+          local post_file="$posts_folder/$post_name"
+          local post_title post_date post_excerpt
+          post_title=$(find_md_raw_title "$post_file" | tr -d '"')
+          post_date=$(find_md_date "$post_file")
+          post_excerpt=$(find_md_short "$post_file" 100)
+          echo "## [$post_title](posts/$post_name)"
+          echo ""
+          [[ -n "$post_date" ]] && echo "*$post_date*"
+          echo ""
+          [[ -n "$post_excerpt" ]] && echo "$post_excerpt ..."
+          echo ""
+          echo "---"
+          echo ""
+        done
+    } >"$blog_index"
+    IO:success "Blog index created: $blog_index"
+
+    # generate category and tag index pages
+    local cat_folder="$blog_folder/categories"
+    local tag_folder="$blog_folder/tags"
+    rm -rf "$cat_folder" "$tag_folder"
+    mkdir -p "$cat_folder" "$tag_folder"
+    # collect all categories and tags from all posts
+    local all_posts
+    all_posts=$(find "$posts_folder" -maxdepth 1 -type f -name '*.md' | sort -r)
+    # extract unique categories
+    local categories
+    categories=$(echo "$all_posts" | while read -r pf; do
+      awk '/^categories:/{found=1; next} /^tags:|^---/{found=0} found && /^[[:space:]]*-/{gsub(/^[[:space:]]*- */,""); print tolower($0)}' "$pf"
+    done | sort -u)
+    # extract unique tags
+    local tags
+    tags=$(echo "$all_posts" | while read -r pf; do
+      awk '/^tags:/{found=1; next} /^categories:|^---/{found=0} found && /^[[:space:]]*-/{gsub(/^[[:space:]]*- */,""); print tolower($0)}' "$pf"
+    done | sort -u)
+
+    # generate category pages
+    while read -r cat; do
+      [[ -z "$cat" ]] && continue
+      local cat_slug cat_file
+      cat_slug=$(Str:slugify "$cat")
+      cat_file="$cat_folder/$cat_slug.md"
+      {
+        echo "# Category: $cat"
+        echo ""
+        echo "$all_posts" | while read -r pf; do
+          if awk '/^categories:/{found=1; next} /^tags:|^---/{found=0} found && /^[[:space:]]*-/{gsub(/^[[:space:]]*- */,""); print tolower($0)}' "$pf" | grep -qx "$cat"; then
+            local pt pd pn
+            pt=$(find_md_raw_title "$pf" | tr -d '"')
+            pd=$(find_md_date "$pf")
+            pn=$(basename "$pf")
+            echo "* [$pt](../posts/$pn) — *$pd*"
+          fi
+        done
+      } >"$cat_file"
+      IO:debug "Category page: $cat_file"
+    done <<<"$categories"
+
+    # generate tag pages
+    while read -r tag; do
+      [[ -z "$tag" ]] && continue
+      local tag_slug tag_file
+      tag_slug=$(Str:slugify "$tag")
+      tag_file="$tag_folder/$tag_slug.md"
+      {
+        echo "# Tag: $tag"
+        echo ""
+        echo "$all_posts" | while read -r pf; do
+          if awk '/^tags:/{found=1; next} /^categories:|^---/{found=0} found && /^[[:space:]]*-/{gsub(/^[[:space:]]*- */,""); print tolower($0)}' "$pf" | grep -qx "$tag"; then
+            local pt pd pn
+            pt=$(find_md_raw_title "$pf" | tr -d '"')
+            pd=$(find_md_date "$pf")
+            pn=$(basename "$pf")
+            echo "* [$pt](../posts/$pn) — *$pd*"
+          fi
+        done
+      } >"$tag_file"
+      IO:debug "Tag page: $tag_file"
+    done <<<"$tags"
+
+    IO:success "Category/tag pages created in $cat_folder/ and $tag_folder/"
+    ;;
+
   toc)
     #TIP: use «$script_prefix toc <folder> <file>» to create Table Of Contents for all Markdown files in folder
     #TIP:> $script_prefix toc faq/services
@@ -329,16 +458,36 @@ function Script:main() {
     fi |
       sed 's|^./||' |
       grep -v 'VERSION.md' |
-      sort |
+      while read -r md_file; do
+        local md_date=""
+        [[ "$SHORT" == 1 ]] && md_date=$(find_md_date "$md_file")
+        echo "${md_date:- } $md_file"
+      done |
+      if [[ "$SHORT" == 1 ]]; then
+        sort -r  # sort by date descending (date is first field)
+      else
+        sort -k2 # sort by filename
+      fi |
+      awk '{ print $NF }' |
       while read -r md_file; do
         md_title=$(find_md_title "$md_file")
+        local md_date=""
         local md_short=""
-        [[ "$SHORT" == 1 ]] && md_short=$(find_md_short "$md_file")
+        if [[ "$SHORT" == 1 ]]; then
+          md_date=$(find_md_date "$md_file")
+          md_short=$(find_md_short "$md_file")
+        fi
         local md_pre=""
         if [[ "$TREE" == 1 ]]; then
           md_pre="[ ] $(echo "$md_file" | awk -F"/" '{ for(i=1;i < NF; i++) printf "&rarr; "}')"
         fi
-        [[ -n "$md_title" ]] && echo "* $md_pre [$md_title]($md_file) $md_short"
+        if [[ -n "$md_title" ]]; then
+          if [[ -n "$md_date" ]]; then
+            echo -e "* $md_pre **[$md_title]($md_file)** — *$md_date*\n    $md_short\n"
+          else
+            echo "* $md_pre [$md_title]($md_file) $md_short"
+          fi
+        fi
       done |
       if [[ -n "$output_file" ]]; then
         local pre_file post_file
@@ -406,6 +555,47 @@ function Script:main() {
 ## Put your helper scripts here
 #####################################################################
 
+function Docker:require_running() {
+  ## check if Docker CLI is available
+  if ! command -v docker &>/dev/null; then
+    IO:die "Docker is not installed"
+  fi
+  ## check if Docker daemon is running
+  if docker info &>/dev/null; then
+    IO:debug "Docker is running"
+    return 0
+  fi
+  IO:alert "Docker is not running"
+  ## try to start Docker Desktop
+  if [[ "$os_name" == "macOS" ]]; then
+    if [[ -d "/Applications/Docker.app" ]]; then
+      if IO:confirm "Start Docker Desktop?"; then
+        IO:print "Starting Docker Desktop ..."
+        open -a Docker
+        local wait=0
+        while ! docker info &>/dev/null; do
+          sleep 2
+          wait=$((wait + 2))
+          if [[ $wait -ge 60 ]]; then
+            IO:die "Docker did not start within 60 seconds"
+          fi
+        done
+        IO:print "Docker is now running"
+        return 0
+      fi
+    fi
+  elif [[ "$os_name" == "Linux" ]]; then
+    if IO:confirm "Start Docker daemon with 'sudo systemctl start docker'?"; then
+      sudo systemctl start docker
+      sleep 2
+      docker info &>/dev/null || IO:die "Docker failed to start"
+      IO:print "Docker is now running"
+      return 0
+    fi
+  fi
+  IO:die "Docker is not running — please start it manually"
+}
+
 function derive_port() {
   local port=8000
   local digest
@@ -431,10 +621,34 @@ function find_md_title() {
   fi
 }
 
+function find_md_raw_title() {
+  local file="$1"
+  local from_h1 from_front
+  from_h1=$(grep -m 1 '^# ' "$file" | sed 's/^# //' | head -1)
+  from_front=$(grep -m 1 '^title: ' "$file" | sed 's/^title: //' | head -1)
+  if [[ -n "$from_h1" ]]; then
+    echo "$from_h1" | sed 's/\r$//'
+  elif [[ -n "$from_front" ]]; then
+    echo "$from_front" | sed 's/\r$//'
+  else
+    basename "$file" .md
+  fi
+}
+
 function find_md_short() {
   local file="$1"
   local words="${2:-15}"
-  grep <"$file" -v '^[#!\[]' | tr '\n' ' ' | sed 's|[^a-zA-Z0-9@. ]| |g' | tr -s ' ' | cut -d' ' -f"1-$words"
+  awk <"$file" '
+    /^---$/ { fm++; next }
+    fm < 2 && fm > 0 { next }
+    /^#/ { next }
+    { print }
+  ' | tr '\n' ' ' | sed 's|[^a-zA-Z0-9@. ]| |g' | tr -s ' ' | cut -d' ' -f"1-$words"
+}
+
+function find_md_date() {
+  local file="$1"
+  grep -m 1 '^date: ' "$file" | sed 's/^date: *//' | tr -d '"' | head -1
 }
 
 #####################################################################

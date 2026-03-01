@@ -1,0 +1,645 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="mkdox Docs by pforret">
+      
+      
+      
+        <link rel="canonical" href="http://mkdox.test/">
+      
+      
+      
+        <link rel="next" href="./PRPs/zensical-migration/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="./icon/android-chrome-192x192.png">
+      <meta name="generator" content="zensical-0.0.24">
+    
+    
+      
+        <title>pforret/mkdox - mkdox Docs</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="./assets/stylesheets/modern/main.28978c9b.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="./assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Nunito";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,a=__md_scope)=>JSON.parse(t.getItem(a.pathname+"."+e)),__md_set=(e,t,a=localStorage,_=__md_scope)=>{try{a.setItem(_.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pforretmkdox" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="" title="mkdox Docs" class="md-header__button md-logo" aria-label="mkdox Docs" data-md-component="logo">
+      
+  <img src="./icon/android-chrome-192x192.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            mkdox Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              pforret/mkdox
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+    </div>
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="" class="md-tabs__link">
+        
+  
+  pforret/mkdox
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="./PRPs/zensical-migration/" class="md-tabs__link">
+          
+  
+  PRPs
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="" title="mkdox Docs" class="md-nav__button md-logo" aria-label="mkdox Docs" data-md-component="logo">
+      
+  <img src="./icon/android-chrome-192x192.png" alt="logo">
+
+    </a>
+    mkdox Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pforret/mkdox
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pforret/mkdox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔥 Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⚡️ Examples
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stargazers-over-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stargazers over time
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#acknowledgements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📝 Acknowledgements
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PRPs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PRPs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./PRPs/zensical-migration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PRP: Migrate mkdox from MkDocs to Zensical
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+<p><img alt="bash_unit CI" src="https://github.com/pforret/mkdox/workflows/bash_unit%20CI/badge.svg" />
+<img alt="Shellcheck CI" src="https://github.com/pforret/mkdox/workflows/Shellcheck%20CI/badge.svg" />
+<img alt="GH Language" src="https://img.shields.io/github/languages/top/pforret/mkdox" />
+<img alt="GH stars" src="https://img.shields.io/github/stars/pforret/mkdox" />
+<img alt="GH tag" src="https://img.shields.io/github/v/tag/pforret/mkdox" />
+<img alt="GH License" src="https://img.shields.io/github/license/pforret/mkdox" />
+<a href="https://www.basher.it/package/"><img alt="basher install" src="https://img.shields.io/badge/basher-install-white?logo=gnu-bash&amp;style=flat" /></a></p>
+<h1 id="pforretmkdox">pforret/mkdox<a class="headerlink" href="#pforretmkdox" title="Permanent link">&para;</a></h1>
+<p><img alt="" src="assets/unsplash.documents.jpg" /></p>
+<p>Convenient bash wrapper for Mkdocs Material projects via Docker</p>
+<h2 id="usage">🔥 Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Program : mkdox  by peter@forret.com
+Version : v0.6.1 (Sep 20 16:53:03 2025)
+Purpose : easy wrapper for Material Mkdocs in Docker mode
+Usage   : mkdox [-h] [-q] [-v] [-f] [-B] [-G] [-I] [-Q] [-R] [-T] [-X] [-l &lt;log_dir&gt;] [-t &lt;tmp_dir&gt;] [-D &lt;DOCKER&gt;] [-E &lt;TITLE&gt;] [-H &lt;HISTORY&gt;] [-L &lt;LENGTH&gt;] [-P &lt;PORT&gt;] [-S &lt;SECS&gt;] &lt;action&gt; &lt;input?&gt; &lt;output?&gt;
+Flags, options and parameters:
+    -h|--help        : [flag] show usage [default: off]
+    -q|--quiet       : [flag] no output [default: off]
+    -v|--verbose     : [flag] also show debug messages [default: off]
+    -f|--force       : [flag] do not ask for confirmation (always yes) [default: off]
+    -B|--BLOG        : [flag] use blog-enabled template for mkdox new [default: off]
+    -G|--GITPUSH     : [flag] push to git after commit [default: off]
+    -I|--INDEX       : [flag] build index.md if index.pre/.post present (for mkdox build) [default: off]
+    -Q|--SHORT       : [flag] include short contents of page (for mkdox toc) [default: off]
+    -R|--RECURSIVE   : [flag] also list subfolders (for mkdox toc) [default: off]
+    -T|--TREE        : [flag] list as tree (for mkdox toc) [default: off]
+    -X|--EXPORT      : [flag] export to PDF (for mkdox build) [default: off]
+    -l|--log_dir &lt;?&gt; : [option] folder for log files   [default: /Users/pforret/log/mkdox]
+    -t|--tmp_dir &lt;?&gt; : [option] folder for temp files  [default: /tmp/mkdox]
+    -D|--DOCKER &lt;?&gt;  : [option] docker image to use  [default: pforret/mkdox-material-derived]
+    -E|--TITLE &lt;?&gt;   : [option] set site title
+    -H|--HISTORY &lt;?&gt; : [option] days to take into account for mkdox recent  [default: 7]
+    -L|--LENGTH &lt;?&gt;  : [option] max commit message length  [default: 99]
+    -P|--PORT &lt;?&gt;    : [option] http port for serve
+    -S|--SECS &lt;?&gt;    : [option] seconds to wait for launching a browser  [default: 10]
+    &lt;action&gt;         : [choice] action to perform  [options: new,serve,post,images,build,recent,toc,check,env,update]
+    &lt;input&gt;          : [parameter] input folder name (optional)
+    &lt;output&gt;         : [parameter] output file name (optional)
+
+### TIPS &amp; EXAMPLES
+* use mkdox new to create new Mkdocs Material project
+  mkdox new &lt;name&gt;
+* use mkdox build to create static HTML site in _site folder
+  mkdox build
+* use mkdox serve to start local website server (for preview)
+  mkdox serve
+* use mkdox images to list all images in a folder into a .md file
+  mkdox images docs/some/folder docs/some/folder/images.md
+* use mkdox toc &lt;folder&gt; &lt;file&gt; to create Table Of Contents for all Markdown files in folder
+  mkdox toc faq/services
+  mkdox -R toc . index
+* use mkdox recent to quickly list all pages changed in last N days
+  mkdox recent &gt;&gt; changes.md
+  mkdox -H 2 recent | sed &#39;s|* |\&amp;bull; |&#39; &gt;&gt; changes.md
+* use mkdox check to check if this script is ready to execute and what values the options/flags are
+  mkdox check
+* use mkdox env to generate an example .env file
+  mkdox env &gt; .env
+* use mkdox update to update to the latest version
+  mkdox update
+* &gt;&gt;&gt; bash script created with pforret/bashew
+* &gt;&gt;&gt; for bash development, also check out pforret/setver and pforret/progressbar
+</code></pre></div>
+<h2 id="examples">⚡️ Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># create new Mkdocs Material project in folder &#39;Intranet&#39;</span>
+&gt;<span class="w"> </span>mkdox<span class="w"> </span>new<span class="w"> </span>Intranet
+
+<span class="c1"># serve Mkdocs project on http://localhost:8800</span>
+&gt;<span class="w"> </span>mkdox<span class="w"> </span>-P<span class="w"> </span><span class="m">8800</span><span class="w"> </span>serve
+
+<span class="c1"># build all HTML pages in /site</span>
+&gt;<span class="w"> </span>mkdox<span class="w"> </span>build
+
+<span class="c1"># create table of contents</span>
+&gt;<span class="w"> </span>mkdox<span class="w"> </span>toc
+*<span class="w"> </span><span class="o">[</span>Changelog<span class="o">](</span>CHANGELOG.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span>Contributor<span class="w"> </span>Covenant<span class="w"> </span>Code<span class="w"> </span>Of<span class="w"> </span>Conduct<span class="o">](</span>CODE_OF_CONDUCT.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span>Contributing<span class="o">](</span>CONTRIBUTING.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span>Pforret<span class="w"> </span>Mkdox<span class="o">](</span>README.md<span class="o">)</span>
+
+<span class="c1"># list all subpages in tree structure</span>
+&gt;<span class="w"> </span>mkdox<span class="w"> </span>-R<span class="w"> </span>-T<span class="w"> </span>toc
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span>Changelog<span class="o">](</span>CHANGELOG.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span>Contributor<span class="w"> </span>Covenant<span class="w"> </span>Code<span class="w"> </span>Of<span class="w"> </span>Conduct<span class="o">](</span>CODE_OF_CONDUCT.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span>Contributing<span class="o">](</span>CONTRIBUTING.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span>Pforret<span class="w"> </span>Mkdox<span class="o">](</span>README.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span>Markdown<span class="w"> </span>Extensions<span class="o">](</span>temp/docs/extensions.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span>Welcome<span class="w"> </span>To<span class="w"> </span>Mkdocs<span class="o">](</span>temp/docs/index.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span>Installed<span class="w"> </span>Plugins<span class="o">](</span>temp/docs/plugins.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span>Markdown<span class="w"> </span>Extensions<span class="o">](</span>templates/docs/extensions.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span><span class="o">{</span>site<span class="w"> </span>Name<span class="o">}](</span>templates/docs/index.md<span class="o">)</span>
+*<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span><span class="p">&amp;</span>rarr<span class="p">;</span><span class="w"> </span>Installed<span class="w"> </span>Plugins<span class="o">](</span>templates/docs/plugins.md<span class="o">)</span>
+
+<span class="c1"># list all recently changed pages</span>
+&gt;<span class="w"> </span>mkdox<span class="w"> </span>-H<span class="w"> </span><span class="m">3</span><span class="w"> </span>-R<span class="w"> </span>recent
+*<span class="w"> </span><span class="o">[</span>Pforret<span class="w"> </span>Mkdox<span class="o">](</span>README.md<span class="o">)</span>
+</code></pre></div>
+<h2 id="installation">🚀 Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<p>with <a href="https://github.com/basherpm/basher">basher</a></p>
+<pre><code>$ basher install pforret/mkdox
+</code></pre>
+<p>or with <code>git</code></p>
+<pre><code>$ git clone https://github.com/pforret/mkdox.git
+$ cd mkdox
+</code></pre>
+<h2 id="stargazers-over-time">Stargazers over time<a class="headerlink" href="#stargazers-over-time" title="Permanent link">&para;</a></h2>
+<p><a href="https://starchart.cc/pforret/mkdox"><img alt="Stargazers over time" src="https://starchart.cc/pforret/mkdox.svg?variant=adaptive" /></a></p>
+<h2 id="acknowledgements">📝 Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permanent link">&para;</a></h2>
+<ul>
+<li>script created with <a href="https://github.com/pforret/bashew">bashew</a></li>
+</ul>
+<p><a href="https://squidfunk.github.io/mkdocs-material/"><img alt="Built with Material for MkDocs" src="https://img.shields.io/badge/Material_for_MkDocs-526CFE?style=for-the-badge&amp;logo=MaterialForMkDocs&amp;logoColor=white" /></a></p>
+<p>&copy; 2024 Peter Forret - <a href="https://blog.forret.com">blog.forret.com</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2026 mkdox Docs &bull; pforret
+    </div>
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":".","features":["content.code.copy","header.autohide","navigation.instant","navigation.integrate","navigation.tabs","navigation.tabs.sticky","navigation.tracking","search.highlight","search.suggest","toc.integrate"],"search":"./assets/javascripts/workers/search.e2d2d235.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="./assets/javascripts/bundle.16f8adc2.min.js"></script>
+      
+    
+  </body>
+</html>

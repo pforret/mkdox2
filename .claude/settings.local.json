@@ -2,7 +2,20 @@
   "permissions": {
     "allow": [
       "Bash(gh api:*)",
-      "Bash(chmod +x:*)"
+      "Bash(chmod +x:*)",
+      "WebFetch(domain:squidfunk.github.io)",
+      "WebSearch",
+      "WebFetch(domain:hub.docker.com)",
+      "WebFetch(domain:zensical.org)",
+      "Bash(git checkout:*)",
+      "Bash(shellcheck:*)",
+      "Bash(./mkdox.sh serve:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:www.mkdocs.org)",
+      "WebFetch(domain:docs.rs)"
     ]
   }
 }

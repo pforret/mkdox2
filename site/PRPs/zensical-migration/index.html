@@ -1,0 +1,764 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="mkdox Docs by pforret">
+      
+      
+      
+        <link rel="canonical" href="http://mkdox.test/PRPs/zensical-migration/">
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../icon/android-chrome-192x192.png">
+      <meta name="generator" content="zensical-0.0.24">
+    
+    
+      
+        <title>PRP: Migrate mkdox from MkDocs to Zensical - mkdox Docs</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../../assets/stylesheets/modern/main.28978c9b.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/modern/palette.dfe2e883.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Nunito";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,a=__md_scope)=>JSON.parse(t.getItem(a.pathname+"."+e)),__md_set=(e,t,a=localStorage,_=__md_scope)=>{try{a.setItem(_.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#prp-migrate-mkdox-from-mkdocs-to-zensical" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="mkdox Docs" class="md-header__button md-logo" aria-label="mkdox Docs" data-md-component="logo">
+      
+  <img src="../../icon/android-chrome-192x192.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            mkdox Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              PRP: Migrate mkdox from MkDocs to Zensical
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="none" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+    </div>
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  pforret/mkdox
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="././" class="md-tabs__link">
+          
+  
+  PRPs
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="mkdox Docs" class="md-nav__button md-logo" aria-label="mkdox Docs" data-md-component="logo">
+      
+  <img src="../../icon/android-chrome-192x192.png" alt="logo">
+
+    </a>
+    mkdox Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    pforret/mkdox
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PRPs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    PRPs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PRP: Migrate mkdox from MkDocs to Zensical
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="././" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PRP: Migrate mkdox from MkDocs to Zensical
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Context
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Branch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Changes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-dockerdockerfile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. docker/Dockerfile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-dockerpush_dockersh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. docker/push_docker.sh
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-mkdoxsh-script-metadata-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. mkdox.sh — Script metadata &amp; options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-mkdoxsh-new-command-lines-72-163" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. mkdox.sh — new command (~lines 72-163)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-mkdoxsh-build-command-lines-166-213" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. mkdox.sh — build command (~lines 166-213)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-mkdoxsh-serve-command-lines-215-244" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. mkdox.sh — serve command (~lines 215-244)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-templates-new-zensicaltoml-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Templates — new zensical.toml files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-mkdoxsh-config-file-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. mkdox.sh — config file detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-mkdoxsh-post-command-lines-266-295" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. mkdox.sh — post command (~lines 266-295)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-text-updates-across-the-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Text updates across the script
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-claudemd-versionmd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. CLAUDE.md &amp; VERSION.md
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#files-modified" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files modified
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#open-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+<h1 id="prp-migrate-mkdox-from-mkdocs-to-zensical">PRP: Migrate mkdox from MkDocs to Zensical<a class="headerlink" href="#prp-migrate-mkdox-from-mkdocs-to-zensical" title="Permanent link">&para;</a></h1>
+<h2 id="context">Context<a class="headerlink" href="#context" title="Permanent link">&para;</a></h2>
+<p>MkDocs 1.x is unmaintained. MkDocs 2.0 drops plugin support and is incompatible with Material for MkDocs. The Material team created <strong>Zensical</strong> as the successor — a Rust+Python static site generator with full Material feature parity (blog, search, extensions all built-in). Zensical uses <code>zensical.toml</code> (TOML) natively but can fall back to <code>mkdocs.yml</code>.</p>
+<h2 id="branch">Branch<a class="headerlink" href="#branch" title="Permanent link">&para;</a></h2>
+<p>Create branch <code>feature/zensical-migration</code> from master.</p>
+<h2 id="changes">Changes<a class="headerlink" href="#changes" title="Permanent link">&para;</a></h2>
+<h3 id="1-dockerdockerfile">1. <code>docker/Dockerfile</code><a class="headerlink" href="#1-dockerdockerfile" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Change base image: <code>squidfunk/mkdocs-material:latest</code> → <code>zensical/zensical:latest</code></li>
+<li>Update pip plugins: remove plugins now built-in to Zensical (blog, search, minify, glightbox, git-revision-date). Keep those still needed as third-party (awesome-pages, autolinks, include-markdown, rss, markdown-include). Verify at build time; remove any that fail.</li>
+<li>Change entrypoint from <code>mkdocs</code> → <code>zensical</code></li>
+<li>Change CMD from <code>["serve", "--dev-addr=0.0.0.0:8000"]</code> → <code>["serve", "--dev-addr=0.0.0.0:8000"]</code> (same args, different binary)</li>
+</ul>
+<h3 id="2-dockerpush_dockersh">2. <code>docker/push_docker.sh</code><a class="headerlink" href="#2-dockerpush_dockersh" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Change image name: <code>pforret/mkdox-material-derived</code> → <code>pforret/mkdox-zensical</code></li>
+</ul>
+<h3 id="3-mkdoxsh-script-metadata-options">3. <code>mkdox.sh</code> — Script metadata &amp; options<a class="headerlink" href="#3-mkdoxsh-script-metadata-options" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update <code>script_description</code>: "easy wrapper for Zensical/Material in Docker mode"</li>
+<li>Update default Docker image option (line 49): <code>pforret/mkdox-material-derived</code> → <code>pforret/mkdox-zensical</code></li>
+</ul>
+<h3 id="4-mkdoxsh-new-command-lines-72-163">4. <code>mkdox.sh</code> — <code>new</code> command (~lines 72-163)<a class="headerlink" href="#4-mkdoxsh-new-command-lines-72-163" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Change Docker <code>new</code> command: <code>docker run ... "$DOCKER" new "$folder"</code> (Zensical's <code>new</code> uses same syntax)</li>
+<li>After scaffolding: detect if <code>zensical.toml</code> was created; if so, apply template substitution to it (same placeholders)</li>
+<li>Update user-facing messages: "Mkdocs Material" → "Zensical"</li>
+</ul>
+<h3 id="5-mkdoxsh-build-command-lines-166-213">5. <code>mkdox.sh</code> — <code>build</code> command (~lines 166-213)<a class="headerlink" href="#5-mkdoxsh-build-command-lines-166-213" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Docker run command stays structurally the same: <code>docker run ... "$DOCKER" build</code></li>
+<li>Remove <code>-e ENABLE_PDF_EXPORT</code> (Zensical handles this differently; flag kept but may be no-op)</li>
+<li>Update user-facing messages</li>
+</ul>
+<h3 id="6-mkdoxsh-serve-command-lines-215-244">6. <code>mkdox.sh</code> — <code>serve</code> command (~lines 215-244)<a class="headerlink" href="#6-mkdoxsh-serve-command-lines-215-244" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Docker run command: same structure, Zensical <code>serve</code> uses same <code>--dev-addr</code> and port 8000</li>
+<li>Update user-facing messages</li>
+</ul>
+<h3 id="7-templates-new-zensicaltoml-files">7. Templates — new <code>zensical.toml</code> files<a class="headerlink" href="#7-templates-new-zensicaltoml-files" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Create <code>templates/simple/zensical.toml</code> — TOML equivalent of current <code>mkdocs.yml</code> with same placeholders</li>
+<li>Create <code>templates/with_blog/zensical.toml</code> — TOML equivalent with blog/rss config</li>
+<li>Keep existing <code>mkdocs.yml</code> files for backward compatibility (existing projects)</li>
+</ul>
+<h3 id="8-mkdoxsh-config-file-detection">8. <code>mkdox.sh</code> — config file detection<a class="headerlink" href="#8-mkdoxsh-config-file-detection" title="Permanent link">&para;</a></h3>
+<ul>
+<li>In <code>serve</code> and <code>build</code> commands, add fallback logic:</li>
+<li>If <code>zensical.toml</code> exists → use it (default, Zensical auto-detects)</li>
+<li>Else if <code>mkdocs.yml</code> exists → pass <code>-f mkdocs.yml</code> to Zensical</li>
+<li>Else → die with error</li>
+<li>In <code>new</code> command: template now creates <code>zensical.toml</code></li>
+</ul>
+<h3 id="9-mkdoxsh-post-command-lines-266-295">9. <code>mkdox.sh</code> — <code>post</code> command (~lines 266-295)<a class="headerlink" href="#9-mkdoxsh-post-command-lines-266-295" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update <code>blog_dir</code> detection: check <code>zensical.toml</code> first (grep <code>blog_dir</code>), fall back to <code>mkdocs.yml</code></li>
+</ul>
+<h3 id="10-text-updates-across-the-script">10. Text updates across the script<a class="headerlink" href="#10-text-updates-across-the-script" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Replace "Mkdocs Material" / "MkDocs" references in user-facing messages with "Zensical"</li>
+<li>Update TIP comments</li>
+</ul>
+<h3 id="11-claudemd-versionmd">11. <code>CLAUDE.md</code> &amp; <code>VERSION.md</code><a class="headerlink" href="#11-claudemd-versionmd" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Update CLAUDE.md to reflect Zensical</li>
+<li>Bump version (minor: 0.7.0)</li>
+</ul>
+<h2 id="files-modified">Files modified<a class="headerlink" href="#files-modified" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>docker/Dockerfile</code></li>
+<li><code>docker/push_docker.sh</code></li>
+<li><code>mkdox.sh</code> (main script)</li>
+<li><code>templates/simple/zensical.toml</code> (new)</li>
+<li><code>templates/with_blog/zensical.toml</code> (new)</li>
+<li><code>CLAUDE.md</code></li>
+<li><code>VERSION.md</code></li>
+</ul>
+<h2 id="verification">Verification<a class="headerlink" href="#verification" title="Permanent link">&para;</a></h2>
+<ol>
+<li><code>shellcheck mkdox.sh</code> — no new warnings</li>
+<li><code>./mkdox.sh check</code> — runs without errors</li>
+<li>Docker build: <code>cd docker &amp;&amp; docker build -t pforret/mkdox-zensical .</code> — succeeds</li>
+<li><code>./mkdox.sh serve</code> in an existing project with <code>mkdocs.yml</code> — falls back correctly</li>
+<li><code>./mkdox.sh new testproject</code> — creates project with <code>zensical.toml</code></li>
+</ol>
+<h2 id="open-questions">Open questions<a class="headerlink" href="#open-questions" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Which pip plugins will actually install cleanly on the Zensical base image? (will verify during Docker build)</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      &copy; 2026 mkdox Docs &bull; pforret
+    </div>
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["content.code.copy","header.autohide","navigation.instant","navigation.integrate","navigation.tabs","navigation.tabs.sticky","navigation.tracking","search.highlight","search.suggest","toc.integrate"],"search":"../../assets/javascripts/workers/search.e2d2d235.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.16f8adc2.min.js"></script>
+      
+    
+  </body>
+</html>
