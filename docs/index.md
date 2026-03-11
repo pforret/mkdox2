@@ -1,14 +1,14 @@
-![bash_unit CI](https://github.com/pforret/mkdox/workflows/bash_unit%20CI/badge.svg)
-![Shellcheck CI](https://github.com/pforret/mkdox/workflows/Shellcheck%20CI/badge.svg)
-![GH Language](https://img.shields.io/github/languages/top/pforret/mkdox)
-![GH stars](https://img.shields.io/github/stars/pforret/mkdox)
-![GH tag](https://img.shields.io/github/v/tag/pforret/mkdox)
-![GH License](https://img.shields.io/github/license/pforret/mkdox)
+![bash_unit CI](https://github.com/pforret/mkdox2/workflows/bash_unit%20CI/badge.svg)
+![Shellcheck CI](https://github.com/pforret/mkdox2/workflows/Shellcheck%20CI/badge.svg)
+![GH Language](https://img.shields.io/github/languages/top/pforret/mkdox2)
+![GH stars](https://img.shields.io/github/stars/pforret/mkdox2)
+![GH tag](https://img.shields.io/github/v/tag/pforret/mkdox2)
+![GH License](https://img.shields.io/github/license/pforret/mkdox2)
 [![basher install](https://img.shields.io/badge/basher-install-white?logo=gnu-bash&style=flat)](https://www.basher.it/package/)
 
-# pforret/mkdox
+# pforret/mkdox2
 
-![](assets/unsplash.documents.jpg)
+![](assets/mkdox2.jpg)
 
 Convenient bash wrapper for Mkdocs Material projects via Docker
 
@@ -111,16 +111,16 @@ Flags, options and parameters:
 
 with [basher](https://github.com/basherpm/basher)
 
-	$ basher install pforret/mkdox
+	$ basher install pforret/mkdox2
 
 or with `git`
 
-	$ git clone https://github.com/pforret/mkdox.git
-	$ cd mkdox
+	$ git clone https://github.com/pforret/mkdox2.git
+	$ cd mkdox2
 
 ## Stargazers over time 
 
-[![Stargazers over time](https://starchart.cc/pforret/mkdox.svg?variant=adaptive)](https://starchart.cc/pforret/mkdox)
+[![Stargazers over time](https://starchart.cc/pforret/mkdox2.svg?variant=adaptive)](https://starchart.cc/pforret/mkdox2)
 
 
 ## 📝 Acknowledgements

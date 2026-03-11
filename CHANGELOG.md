@@ -10,9 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2024-01-09
 ### Added/changed
-- MOD: mkdox.sh
+- MOD: mkdox2.sh
 - first working version
-- MOD: .gitignore mkdox.sh 
+- MOD: .gitignore mkdox2.sh 
 ## [0.0.1] - 2024-01-09
 ### Added
 - create mkdox with [pforret/bashew](https://github.com/pforret/bashew)

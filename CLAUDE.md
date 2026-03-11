@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **mkdox** — Bash wrapper for Zensical/Material via Docker. Manages creation, serving, building, and content management of documentation sites.
 
-Built on the **bashew** framework (pforret/bashew). Single-script architecture: `mkdox.sh` (~1370 lines).
+Built on the **bashew** framework (pforret/bashew). Single-script architecture: `mkdox2.sh` (~1370 lines).
 
 ## Commands
 
@@ -15,21 +15,21 @@ Built on the **bashew** framework (pforret/bashew). Single-script architecture: 
 ./tests/run_tests.sh
 
 # Lint
-shellcheck mkdox.sh
+shellcheck mkdox2.sh
 
 # Run the tool
-./mkdox.sh new <name>        # Create new project from template
-./mkdox.sh serve              # Docker dev server with hot-reload
-./mkdox.sh build              # Build static HTML via Docker
-./mkdox.sh post               # Create blog post (interactive)
-./mkdox.sh toc                # Generate table of contents
-./mkdox.sh -R -T toc          # Recursive tree TOC
-./mkdox.sh -H 3 recent        # Recently modified pages
+./mkdox2.sh new <name>        # Create new project from template
+./mkdox2.sh serve              # Docker dev server with hot-reload
+./mkdox2.sh build              # Build static HTML via Docker
+./mkdox2.sh post               # Create blog post (interactive)
+./mkdox2.sh toc                # Generate table of contents
+./mkdox2.sh -R -T toc          # Recursive tree TOC
+./mkdox2.sh -H 3 recent        # Recently modified pages
 ```
 
 ## Architecture
 
-### mkdox.sh structure
+### mkdox2.sh structure
 
 - **Lines 33-59**: CLI option declarations via `Option:config()` — declarative flag/option/param definitions
 - **Lines 65-382**: `Script:main()` — action dispatcher with 10 commands: `new`, `serve`, `build`, `post`, `images`, `recent`, `toc`, `check`, `env`, `update`
