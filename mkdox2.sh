@@ -145,6 +145,7 @@ function Script:main() {
               -v CREATION_DATE="$CREATION_DATE" \
               -v CREATION_YEAR="$CREATION_YEAR" \
               -v USERNAME="$USERNAME" \
+              -v MKDOX_VERSION="$script_version" \
               '{
             gsub(/{CREATION_DATE}/,CREATION_DATE);
             gsub(/{CREATION_YEAR}/,CREATION_YEAR);
@@ -152,6 +153,7 @@ function Script:main() {
             gsub(/{REPO_URL}/,REPO_URL);
             gsub(/{SITE_URL}/,SITE_URL);
             gsub(/{USERNAME}/,USERNAME);
+            gsub(/{MKDOX_VERSION}/,MKDOX_VERSION);
             print }' >"$actual"
          elif [[ "$extension" == "env" ]] ; then
            if [[ -f $actual ]]; then
