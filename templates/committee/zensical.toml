@@ -3,12 +3,14 @@
 [project]
 site_name = "{SITE_NAME}"
 site_url = "http://{SITE_URL}"
-site_description = "{SITE_NAME} — an LLM-maintained wiki by {USERNAME}"
-copyright = "&copy; {CREATION_YEAR} {SITE_NAME} &bull; {USERNAME}"
+site_description = "{SITE_NAME} — committee knowledge base maintained by {USERNAME}"
+copyright = "&copy; {CREATION_YEAR} {SITE_NAME}"
 
 [project.theme]
 name = "material"
 custom_dir = "docs/overrides"
+logo = "icon/android-chrome-192x192.png"
+favicon = "icon/android-chrome-192x192.png"
 features = [
   "announce.dismiss",
   "content.code.copy",
@@ -24,12 +26,12 @@ features = [
 ]
 
 [[project.theme.palette]]
-primary = "teal"
-accent = "deep orange"
+primary = "green"
+accent = "orange"
 
 [project.theme.font]
-text = "IBM Plex Sans"
-code = "IBM Plex Mono"
+text = "Lora"
+code = "Fira Code"
 
 [project.markdown.extensions]
 admonition = {}

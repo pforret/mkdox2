@@ -95,12 +95,18 @@ function Script:main() {
     # shellcheck disable=SC2153
     if [[ -z "$TEMPLATE" ]]; then
       IO:print "Available templates:"
-      local i=0 template_list=()
+      local i=0 template_list=() tdesc=""
       for tdir in "$script_install_folder"/templates/*/; do
         tname="$(basename "$tdir")"
         template_list+=("$tname")
         i=$((i + 1))
-        IO:print "  $i) $tname"
+        tdesc=""
+        [[ -f "$tdir/description.txt" ]] && tdesc="$(head -n 1 "$tdir/description.txt")"
+        if [[ -n "$tdesc" ]]; then
+          IO:print "  $i) $tname — $tdesc"
+        else
+          IO:print "  $i) $tname"
+        fi
       done
       [[ ${#template_list[@]} -eq 0 ]] && IO:die "No templates found in $script_install_folder/templates/"
       local choice
@@ -124,6 +130,7 @@ function Script:main() {
         while read -r template; do
           # file="$(echo "$template" | sed 's|^\./||')"
           file="${template//\.\//}"
+          [[ "$file" == "description.txt" ]] && continue
           extension="${file##*.}"
           actual="$folder_path/$file"
           if [[ "$extension" == "md" || "$extension" == "pre" || "$extension" == "post" || "$extension" == "yml" || "$extension" == "toml" ]]; then

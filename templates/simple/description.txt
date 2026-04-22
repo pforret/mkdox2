@@ -1,0 +1,1 @@
+Minimal, generic docs site — bare scaffold for any project.

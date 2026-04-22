@@ -1,0 +1,1 @@
+Business OS for an AI assistant — you're the only human and you want the AI to remember everything across sessions (Cottrell pattern).
