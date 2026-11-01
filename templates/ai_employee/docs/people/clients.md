@@ -1,3 +1,8 @@
+---
+tags:
+  - people
+---
+
 # Clients
 
 Active client roster. Add one section per client. Keep status, owner and key context up to date — this is what the AI reads when you ask "what's going on with X?"
@@ -22,4 +27,4 @@ Active client roster. Add one section per client. Keep status, owner and key con
 
 ----
 
-> Use the [call notes template](../templates/call-notes.md) for every client meeting.
+> Use the [call notes template](../forms/call-notes.md) for every client meeting.

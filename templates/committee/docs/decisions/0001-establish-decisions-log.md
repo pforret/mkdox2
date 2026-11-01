@@ -1,3 +1,9 @@
+---
+tags:
+  - decision
+  - governance
+---
+
 # D-0001 — Establish a decisions log
 
 - **Status:** Accepted

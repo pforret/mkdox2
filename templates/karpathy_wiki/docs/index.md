@@ -34,3 +34,7 @@ This page is **content-oriented** — a catalog of every page in the wiki, with 
 - [Concepts](concepts/index.md) — ideas, theories, frameworks
 
 > created on {CREATION_DATE} by {USERNAME}
+
+> [!TIP]
+> This is an Obsidian-style callout, rendered as an admonition by the `callouts` plugin.
+> See all tagged pages on the [tags](tags.md) page.

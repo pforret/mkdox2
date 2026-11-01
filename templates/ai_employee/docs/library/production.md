@@ -11,7 +11,7 @@ How a signed engagement gets delivered.
 ## 2. Delivery
 
 - Daily progress in [Actions](../actions/index.md)
-- Weekly status email using the [follow-up template](../templates/follow-up.md)
+- Weekly status email using the [follow-up template](../forms/follow-up.md)
 - Every client call → [transcript](../transcripts/index.md) → AI files actions
 
 ## 3. Handoff

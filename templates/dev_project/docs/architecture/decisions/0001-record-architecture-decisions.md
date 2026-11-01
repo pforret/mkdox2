@@ -1,3 +1,9 @@
+---
+tags:
+  - adr
+  - architecture
+---
+
 # 0001. Record architecture decisions
 
 - **Status:** Accepted

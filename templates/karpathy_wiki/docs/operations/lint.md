@@ -1,3 +1,9 @@
+---
+tags:
+  - operation
+  - maintenance
+---
+
 # Lint
 
 Periodic health-check. Run weekly, or after every 10–20 [ingests](ingest.md).

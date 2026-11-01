@@ -37,13 +37,13 @@ flag|h|help|show usage
 flag|q|quiet|no output
 flag|v|verbose|also show debug messages
 flag|f|force|do not ask for confirmation (always yes)
-option|B|TEMPLATE|template to use for mkdox new|
+option|B|TEMPLATE|template to use for mkdox2 new|
 flag|G|GITPUSH|push to git after commit
-flag|I|INDEX|build index.md if index.pre/.post present (for mkdox build)
+flag|I|INDEX|build index.md if index.pre/.post present (for mkdox2 build)
 flag|Q|SHORT|include short contents of page (for mkdox toc)
 flag|R|RECURSIVE|also list subfolders (for mkdox toc)
 flag|T|TREE|list as tree (for mkdox toc)
-flag|X|EXPORT|export to PDF (for mkdox build)
+flag|X|EXPORT|export to PDF (for mkdox2 build)
 option|l|log_dir|folder for log files |$HOME/log/$script_prefix
 option|t|tmp_dir|folder for temp files|/tmp/$script_prefix
 option|D|DOCKER|docker image to use|pforret/mkdox-zensical
@@ -52,7 +52,7 @@ option|H|HISTORY|days to take into account for mkdox recent|7
 option|L|LENGTH|max commit message length|99
 option|P|PORT|http port for serve|
 option|S|SECS|seconds to wait for launching a browser|5
-choice|1|action|action to perform|new,serve,post,blog,images,build,recent,toc,check,env,update
+choice|1|action|action to perform|new,serve,post,images,build,recent,toc,check,env,update
 param|?|input|input folder name
 param|?|output|output file name
 " -v -e '^#' -e '^\s*$'
@@ -72,6 +72,36 @@ function Script:main() {
   new)
     #TIP: use «$script_prefix new» to create new Zensical project
     #TIP:> $script_prefix new <name>
+    #TIP:> $script_prefix -B dev_project new <name>
+    # choose and check the template first, so a bad choice leaves nothing behind
+    local template_folder
+    # shellcheck disable=SC2153
+    if [[ -z "$TEMPLATE" ]]; then
+      # menu order; first entry is the default. Other folders in templates/ only via -B <name>
+      local menu_templates=(simple with_blog karpathy_wiki)
+      local i=0 tname tdesc choice
+      IO:print "Available templates:"
+      for tname in "${menu_templates[@]}"; do
+        i=$((i + 1))
+        tdesc=""
+        [[ -f "$script_install_folder/templates/$tname/description.txt" ]] && tdesc="$(head -n 1 "$script_install_folder/templates/$tname/description.txt")"
+        if [[ -n "$tdesc" ]]; then
+          IO:print "  $i) $tname — $tdesc"
+        else
+          IO:print "  $i) $tname"
+        fi
+      done
+      read -r -p "Pick a template [1-${#menu_templates[@]}, Enter=1] > " choice
+      choice="${choice:-1}"
+      if [[ "$choice" =~ ^[0-9]+$ ]] && ((choice >= 1 && choice <= ${#menu_templates[@]})); then
+        TEMPLATE="${menu_templates[$((choice - 1))]}"
+      else
+        IO:die "Invalid choice: $choice"
+      fi
+    fi
+    template_folder="$script_install_folder/templates/$TEMPLATE/"
+    [[ ! -d "$template_folder" ]] && IO:die "Template '$TEMPLATE' not found in $script_install_folder/templates/"
+
     Docker:require_running
     local folder="${input:-.}"
     IO:announce "Create new Zensical project in $folder"
@@ -79,46 +109,19 @@ function Script:main() {
     [[ ! -d "$folder/docs" ]] && mkdir "$folder/docs"
     IO:print "Run 'zensical new' via Docker"
     # shellcheck disable=SC2154
-    docker run --platform linux/amd64 --rm -it --user "$(id -u)":"$(id -g)" -v "${PWD}":/docs "$DOCKER" new "$folder" 2>/dev/null || IO:die "Could not create new Zensical project"
+    docker run --rm -it --user "$(id -u)":"$(id -g)" -v "${PWD}":/docs "$DOCKER" new "$folder" 2>/dev/null || IO:die "Could not create new Zensical project"
     # remove files created by 'zensical new' that we don't need
     [[ -f "$folder/.github/workflows/docs.yml" ]] && rm "$folder/.github/workflows/docs.yml"
     [[ -d "$folder/.github/workflows" ]] && rmdir "$folder/.github/workflows" 2>/dev/null
     [[ -d "$folder/.github" ]] && rmdir "$folder/.github" 2>/dev/null
     [[ -f "$folder/mkdocs.yml" ]] && rm "$folder/mkdocs.yml"
-    local folder_path project_name project_title site_name template_folder
+    local folder_path project_name project_title site_name
     folder_path="$(cd "$folder" && pwd)"
     project_name="$(basename "$folder_path")"
     site_name="$project_name.test"
     repo_url="$(cd "$folder_path" && git config --get remote.origin.url 2>/dev/null)" || repo_url=""
     project_title="$project_name Docs"
     [[ -n "$TITLE" ]] && project_title="$TITLE"
-    # shellcheck disable=SC2153
-    if [[ -z "$TEMPLATE" ]]; then
-      IO:print "Available templates:"
-      local i=0 template_list=() tdesc=""
-      for tdir in "$script_install_folder"/templates/*/; do
-        tname="$(basename "$tdir")"
-        template_list+=("$tname")
-        i=$((i + 1))
-        tdesc=""
-        [[ -f "$tdir/description.txt" ]] && tdesc="$(head -n 1 "$tdir/description.txt")"
-        if [[ -n "$tdesc" ]]; then
-          IO:print "  $i) $tname — $tdesc"
-        else
-          IO:print "  $i) $tname"
-        fi
-      done
-      [[ ${#template_list[@]} -eq 0 ]] && IO:die "No templates found in $script_install_folder/templates/"
-      local choice
-      read -r -p "Pick a template [1-${#template_list[@]}] > " choice
-      if [[ "$choice" -ge 1 && "$choice" -le ${#template_list[@]} ]] 2>/dev/null; then
-        TEMPLATE="${template_list[$((choice - 1))]}"
-      else
-        IO:die "Invalid choice: $choice"
-      fi
-    fi
-    template_folder="$script_install_folder/templates/$TEMPLATE/"
-    [[ ! -d "$template_folder" ]] && IO:die "Template '$TEMPLATE' not found in $script_install_folder/templates/"
     IO:print "Use template: $TEMPLATE"
 
     (
@@ -184,11 +187,11 @@ function Script:main() {
     if [[ $folder == "." ]] ; then
       IO:print "* You can now edit the docs in 'docs'"
       IO:print "* You can now edit the settings/look in 'zensical.toml'"
-      IO:print "* To preview the site, run 'mkdox serve'"
+      IO:print "* To preview the site, run '$script_prefix serve'"
     else
       IO:print "* You can now edit the docs in '$folder/docs'"
       IO:print "* You can now edit the settings/look in '$folder/zensical.toml'"
-      IO:print "* To preview the site, run 'cd \"$folder\" && mkdox serve'"
+      IO:print "* To preview the site, run 'cd \"$folder\" && $script_prefix serve'"
     fi
 
     ;;
@@ -232,7 +235,7 @@ function Script:main() {
       IO:die "No zensical.toml or mkdocs.yml found"
     fi
     # shellcheck disable=SC2154
-    docker run --platform linux/amd64 --rm -it -v "${PWD}":/docs "$DOCKER" build "${config_args[@]}"
+    docker run --rm -it -v "${PWD}":/docs "$DOCKER" build "${config_args[@]}"
 
     if [[ ! -d .git ]]; then
       IO:debug "No .git folder detected - skipping git commit/push"
@@ -293,7 +296,7 @@ function Script:main() {
       fi
 
     ) &
-    docker run --platform linux/amd64 --rm -it -p "$PORT":8000 -v "${PWD}":/docs "$DOCKER" serve --dev-addr=0.0.0.0:8000 "${config_args[@]}"
+    docker run --rm -it -p "$PORT":8000 -v "${PWD}":/docs "$DOCKER" serve --dev-addr=0.0.0.0:8000 "${config_args[@]}"
     ;;
 
   images)
@@ -348,110 +351,6 @@ function Script:main() {
     IO:success "New post created: $post_file"
 
     ;;
-  blog)
-    #TIP: use «$script_prefix blog» to generate blog index from posts in docs/blog/posts/
-    #TIP:> $script_prefix blog
-    local blog_folder="docs/blog"
-    if [[ -f zensical.toml ]]; then
-      grep <zensical.toml -q 'blog_dir' && blog_folder="docs/$(awk -F'"' '/blog_dir/ {print $2}' zensical.toml)"
-    elif [[ -f mkdocs.yml ]]; then
-      grep <mkdocs.yml -q 'blog_dir:' && blog_folder="docs/$(awk '/blog_dir:/ {print $2}' mkdocs.yml)"
-    fi
-    local posts_folder="$blog_folder/posts"
-    [[ ! -d "$posts_folder" ]] && IO:die "No posts folder found: $posts_folder"
-    local blog_index="$blog_folder/index.md"
-    IO:announce "Generate blog index: $blog_index"
-    {
-      echo "# Blog"
-      echo ""
-      find "$posts_folder" -maxdepth 1 -type f -name '*.md' |
-        sed 's|^.*/||' |
-        sort -r |
-        head -10 |
-        while read -r post_name; do
-          local post_file="$posts_folder/$post_name"
-          local post_title post_date post_excerpt
-          post_title=$(find_md_raw_title "$post_file" | tr -d '"')
-          post_date=$(find_md_date "$post_file")
-          post_excerpt=$(find_md_short "$post_file" 100)
-          echo "## [$post_title](posts/$post_name)"
-          echo ""
-          [[ -n "$post_date" ]] && echo "*$post_date*"
-          echo ""
-          [[ -n "$post_excerpt" ]] && echo "$post_excerpt ..."
-          echo ""
-          echo "---"
-          echo ""
-        done
-    } >"$blog_index"
-    IO:success "Blog index created: $blog_index"
-
-    # generate category and tag index pages
-    local cat_folder="$blog_folder/categories"
-    local tag_folder="$blog_folder/tags"
-    rm -rf "$cat_folder" "$tag_folder"
-    mkdir -p "$cat_folder" "$tag_folder"
-    # collect all categories and tags from all posts
-    local all_posts
-    all_posts=$(find "$posts_folder" -maxdepth 1 -type f -name '*.md' | sort -r)
-    # extract unique categories
-    local categories
-    categories=$(echo "$all_posts" | while read -r pf; do
-      awk '/^categories:/{found=1; next} /^tags:|^---/{found=0} found && /^[[:space:]]*-/{gsub(/^[[:space:]]*- */,""); print tolower($0)}' "$pf"
-    done | sort -u)
-    # extract unique tags
-    local tags
-    tags=$(echo "$all_posts" | while read -r pf; do
-      awk '/^tags:/{found=1; next} /^categories:|^---/{found=0} found && /^[[:space:]]*-/{gsub(/^[[:space:]]*- */,""); print tolower($0)}' "$pf"
-    done | sort -u)
-
-    # generate category pages
-    while read -r cat; do
-      [[ -z "$cat" ]] && continue
-      local cat_slug cat_file
-      cat_slug=$(Str:slugify "$cat")
-      cat_file="$cat_folder/$cat_slug.md"
-      {
-        echo "# Category: $cat"
-        echo ""
-        echo "$all_posts" | while read -r pf; do
-          if awk '/^categories:/{found=1; next} /^tags:|^---/{found=0} found && /^[[:space:]]*-/{gsub(/^[[:space:]]*- */,""); print tolower($0)}' "$pf" | grep -qx "$cat"; then
-            local pt pd pn
-            pt=$(find_md_raw_title "$pf" | tr -d '"')
-            pd=$(find_md_date "$pf")
-            pn=$(basename "$pf")
-            echo "* [$pt](../posts/$pn) — *$pd*"
-          fi
-        done
-      } >"$cat_file"
-      IO:debug "Category page: $cat_file"
-    done <<<"$categories"
-
-    # generate tag pages
-    while read -r tag; do
-      [[ -z "$tag" ]] && continue
-      local tag_slug tag_file
-      tag_slug=$(Str:slugify "$tag")
-      tag_file="$tag_folder/$tag_slug.md"
-      {
-        echo "# Tag: $tag"
-        echo ""
-        echo "$all_posts" | while read -r pf; do
-          if awk '/^tags:/{found=1; next} /^categories:|^---/{found=0} found && /^[[:space:]]*-/{gsub(/^[[:space:]]*- */,""); print tolower($0)}' "$pf" | grep -qx "$tag"; then
-            local pt pd pn
-            pt=$(find_md_raw_title "$pf" | tr -d '"')
-            pd=$(find_md_date "$pf")
-            pn=$(basename "$pf")
-            echo "* [$pt](../posts/$pn) — *$pd*"
-          fi
-        done
-      } >"$tag_file"
-      IO:debug "Tag page: $tag_file"
-    done <<<"$tags"
-
-    IO:success "Category/tag pages created in $cat_folder/ and $tag_folder/"
-    ;;
-
   toc)
     #TIP: use «$script_prefix toc <folder> <file>» to create Table Of Contents for all Markdown files in folder
     #TIP:> $script_prefix toc faq/services
@@ -627,20 +526,6 @@ function find_md_title() {
     Str:title "$from_front" " " | sed 's/\r$//'
   else
     Str:title "$from_filename"
-  fi
-}
-
-function find_md_raw_title() {
-  local file="$1"
-  local from_h1 from_front
-  from_h1=$(grep -m 1 '^# ' "$file" | sed 's/^# //' | head -1)
-  from_front=$(grep -m 1 '^title: ' "$file" | sed 's/^title: //' | head -1)
-  if [[ -n "$from_h1" ]]; then
-    echo "$from_h1" | sed 's/\r$//'
-  elif [[ -n "$from_front" ]]; then
-    echo "$from_front" | sed 's/\r$//'
-  else
-    basename "$file" .md
   fi
 }
 

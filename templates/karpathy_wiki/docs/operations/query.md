@@ -1,3 +1,8 @@
+---
+tags:
+  - operation
+---
+
 # Query
 
 Answer a question against the wiki.

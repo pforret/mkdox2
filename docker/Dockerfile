@@ -1,4 +1,4 @@
-FROM zensical/zensical:latest
+FROM zensical/zensical:0.0.74
 
 ## install third-party plugins not built into Zensical
 RUN pip install --no-cache-dir \

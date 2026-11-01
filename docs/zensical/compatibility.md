@@ -43,5 +43,27 @@ Third-party MkDocs plugins are **not loaded directly**. Instead, Zensical replac
 | `awesome-nav`                 | Native modular navigation                                       |
 | `literate-nav`                | Native modular navigation                                       |
 | `static-i18n`                 | Native internationalization                                     |
+| `blog` / `material/blog`      | Native built-in (port of the Material blog plugin)              |
+| `rss`                         | Native built-in ("Zensical RSS" feeds)                          |
+| `awesome-pages`               | Not supported: no effect, removed from the mkdox2 templates     |
 
-Plugins not listed above (e.g. `awesome-pages`, `blog`, `rss`) are **not yet supported** in Zensical.
+Other plugins not listed above are **not loaded**: installing their pip package (as `docker/Dockerfile` does) has no effect.
+Blog and RSS were checked on Zensical 0.0.74 with the `with_blog` template: index, posts, archive, category pages and RSS feeds are all generated natively.
+
+### Plugins used in the mkdox2 templates (tested on Zensical 0.0.74)
+
+All templates enable these native plugins (see <https://zensical.org/docs/compatibility/mkdocs/plugins/>):
+
+| Plugin      | Setting that matters                                                     | Result                                                       |
+|-------------|--------------------------------------------------------------------------|--------------------------------------------------------------|
+| `llmstxt`   | `sections` is required (without it `llms.txt` is silently empty)         | `llms.txt`, `llms-full.txt`, Markdown copies of pages        |
+| `tags`      | listing needs `<!-- material/tags -->` on a page (`tags_file` is ignored) | `docs/tags.md` lists all tagged pages                        |
+| `glightbox` | none                                                                     | images open in a lightbox                                    |
+| `privacy`   | `assets_include`: without it, it self-hosts everything in the theme bundle (Pyodide, Ace, ad/video SDKs, ~7.7 MB) | Google Fonts + glightbox self-hosted (~1 MB) |
+| `minify`    | `minify_html` etc. default to false (no effect without them)            | one-line HTML                                                |
+| `social`    | needs `site_url` with a scheme                                           | `assets/images/social/*.png` + `og:image`; no Cairo needed   |
+| `callouts`  | none                                                                     | `> [!NOTE]` rendered as an admonition                        |
+
+- **`markdown-include`** (`{!file.md!}`) does **not** work: the build passes and the tag stays as literal text. Use `pymdownx.snippets` (`--8<-- "file.md"`), which every template enables.
+- `privacy` and `social` cache downloads in `.cache/`; the first build needs network, later builds work offline.
+- A docs folder named `templates/` is not built (its pages are missing from `site/`, and links to them warn "page does not exist"). The `ai_employee` template therefore keeps its templates in `docs/forms/`.

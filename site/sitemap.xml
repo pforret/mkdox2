@@ -4,6 +4,51 @@
         <loc>http://mkdox.test/</loc>
       </url>
       <url>
-        <loc>http://mkdox.test/PRPs/zensical-migration/</loc>
+        <loc>http://mkdox.test/todo/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/2026-11-01.change.limit-template-menu-to-three/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/busy/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/busy/2026-11-01.change.update-zensical-docker-image/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/decisions/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/decisions/2026-11-01.command-hints-and-help-text-in/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/decisions/2026-11-01.leave-pre-existing-sc2001-shellcheck-notes/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/decisions/2026-11-01.tag-pforret-mkdox-zensical-with-latest/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/decisions/2026-11-01.use-a-dedicated-docker-container-buildx/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/decisions/gotchas/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/done/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/plan/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/skipped/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/todo/someday/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/zensical/compatibility/</loc>
+      </url>
+      <url>
+        <loc>http://mkdox.test/zensical/template/</loc>
       </url>
 </urlset>

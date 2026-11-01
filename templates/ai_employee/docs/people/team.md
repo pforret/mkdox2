@@ -1,3 +1,8 @@
+---
+tags:
+  - people
+---
+
 # Team
 
 Everyone on the team. Used by the AI to route actions and reference responsibilities.

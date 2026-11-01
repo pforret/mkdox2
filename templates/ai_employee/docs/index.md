@@ -25,10 +25,14 @@ See [Setup](setup.md) for wiring Claude, Obsidian and MCP connectors.
 - [Library](library/index.md)
     - [Sales process](library/sales.md)
     - [Production workflow](library/production.md)
-- [Templates](templates/index.md)
-    - [Call notes](templates/call-notes.md)
-    - [Follow-up email](templates/follow-up.md)
+- [Templates](forms/index.md)
+    - [Call notes](forms/call-notes.md)
+    - [Follow-up email](forms/follow-up.md)
 - [Transcripts](transcripts/index.md)
 - [Setup](setup.md)
 
 > created on {CREATION_DATE} by {USERNAME}
+
+> [!TIP]
+> This is an Obsidian-style callout, rendered as an admonition by the `callouts` plugin.
+> See all tagged pages on the [tags](tags.md) page.

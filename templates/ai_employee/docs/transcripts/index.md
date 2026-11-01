@@ -17,4 +17,4 @@ Raw call transcripts land here. The AI processes them and files the output acros
 - Filenames: `YYYY-MM-DD-<client>-<topic>.md`
 - Never edit a transcript after the fact — append a note to the client page instead.
 
-> Linked from [Setup](../setup.md) and the [call notes template](../templates/call-notes.md).
+> Linked from [Setup](../setup.md) and the [call notes template](../forms/call-notes.md).

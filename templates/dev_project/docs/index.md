@@ -37,3 +37,7 @@ Engineering documentation for `{REPO_URL}`.
 - [Changelog](changelog.md)
 
 > created on {CREATION_DATE} by {USERNAME}
+
+> [!TIP]
+> This is an Obsidian-style callout, rendered as an admonition by the `callouts` plugin.
+> See all tagged pages on the [tags](tags.md) page.

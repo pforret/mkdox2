@@ -40,17 +40,18 @@ shellcheck mkdox2.sh
 
 - **Namespaced functions**: `IO:print`, `Str:slugify`, `Os:require`, etc.
 - **Docker for heavy lifting**: `serve` and `build` run Zensical inside `pforret/mkdox-zensical` container
-- **Template system**: `templates/simple/` and `templates/with_blog/` use `{PLACEHOLDER}` variables substituted via awk
+- **Template system**: each folder in `templates/` (with a one-line `description.txt`) uses `{PLACEHOLDER}` variables substituted via awk. `mkdox2 new` without `-B` shows a fixed menu from the `menu_templates` array in the `new)` action: `simple` (default on Enter), `with_blog`, `karpathy_wiki`. The other templates (`ai_employee`, `committee`, `dev_project`) only via `-B <name>`. The template is chosen and checked before any folder is created or Docker runs
 - **Config detection**: prefers `zensical.toml` (TOML), falls back to `mkdocs.yml` (YAML) for backward compatibility
 - **Strict mode**: `set -uo pipefail` with trap-based error reporting
 - **.env override**: Environment variables in `.env` override all option defaults
 
 ### Docker image
 
-The Docker image `pforret/mkdox-zensical` (extends `zensical/zensical` with third-party plugins) is managed in `docker/`. Shares the repo-level `VERSION.md` version.
+The Docker image `pforret/mkdox-zensical` (extends `zensical/zensical` with third-party plugins) is managed in `docker/`. Its tags follow the Zensical version, not `VERSION.md`: each push publishes `:latest` and `:<zensical version>` (e.g. `:0.0.74`), multi-arch (linux/amd64 + linux/arm64).
 
-- `docker/Dockerfile` — image definition
-- `docker/push_docker.sh` — build and push to Docker Hub
+- `docker/Dockerfile` — image definition; pins `FROM zensical/zensical:<version>` (bump the Zensical version here)
+- `docker/push_docker.sh` — `docker buildx` multi-arch build (via a `docker-container` builder `mkdox-builder`, created on first run) and push to Docker Hub; reads the tag from the `FROM` line
+- Local test without pushing: `cd docker && docker buildx build --pull --platform linux/arm64 -t mkdox-zensical:test --load .`, then `mkdox2 -D mkdox-zensical:test ...`
 
 ### Templates vs docs
 

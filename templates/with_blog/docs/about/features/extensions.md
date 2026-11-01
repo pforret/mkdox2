@@ -1,3 +1,9 @@
+---
+tags:
+  - features
+  - markdown
+---
+
 # Markdown Extensions
 
 !!! note

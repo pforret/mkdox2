@@ -1,3 +1,9 @@
+---
+tags:
+  - operations
+  - on-call
+---
+
 # Runbook
 
 Common tasks, in copy-paste form.

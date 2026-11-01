@@ -28,3 +28,7 @@ The shared brain of our committee. Everyone can read, members keep it current.
 - [Resources](resources.md)
 
 > Started on {CREATION_DATE} &bull; maintained by {USERNAME} and the committee
+
+> [!TIP]
+> This is an Obsidian-style callout, rendered as an admonition by the `callouts` plugin.
+> See all tagged pages on the [tags](tags.md) page.

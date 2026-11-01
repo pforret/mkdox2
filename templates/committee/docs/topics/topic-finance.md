@@ -1,3 +1,9 @@
+---
+tags:
+  - topic
+  - finance
+---
+
 # Finance
 
 - **Lead:** [Treasurer](../members/roles.md)

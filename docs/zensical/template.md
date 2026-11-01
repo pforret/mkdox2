@@ -92,6 +92,10 @@ Used with `is` keyword, e.g. `{% if value is defined %}`.
 
 ## Blog Index via MiniJinja — Feasibility
 
+> **Outdated:** Zensical now has a native blog (port of the Material blog plugin): it generates the blog index, archive and category pages itself.
+> The `mkdox2 blog` action and the workarounds below are no longer needed and `mkdox2 blog` has been removed.
+> See <https://zensical.org/docs/setup/blog/>. Kept for reference only.
+
 **Question:** Can MiniJinja template overrides generate a `docs/blog/index.md` listing from posts in `docs/blog/posts/`?
 
 **Answer: No.** MiniJinja cannot:

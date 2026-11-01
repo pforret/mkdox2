@@ -40,6 +40,6 @@ When processing a [transcript](transcripts/index.md) or new information, file it
 - **Decisions** → append to [Decisions](actions/decisions.md)
 - **Client-specific info** → update the matching entry in [Clients](people/clients.md)
 - **New playbook or framework** → add a page to [Library](library/index.md)
-- **Reusable formats** → add to [Templates](templates/index.md)
+- **Reusable formats** → add to [Templates](forms/index.md)
 
 Always start with: "Before answering, search this vault for relevant notes."

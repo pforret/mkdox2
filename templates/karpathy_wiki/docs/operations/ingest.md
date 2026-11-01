@@ -1,3 +1,8 @@
+---
+tags:
+  - operation
+---
+
 # Ingest
 
 Process a new [source](../architecture/sources.md) into the wiki.
