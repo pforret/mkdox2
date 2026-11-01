@@ -40,15 +40,15 @@ flag|f|force|do not ask for confirmation (always yes)
 option|B|TEMPLATE|template to use for mkdox2 new|
 flag|G|GITPUSH|push to git after commit
 flag|I|INDEX|build index.md if index.pre/.post present (for mkdox2 build)
-flag|Q|SHORT|include short contents of page (for mkdox toc)
-flag|R|RECURSIVE|also list subfolders (for mkdox toc)
-flag|T|TREE|list as tree (for mkdox toc)
+flag|Q|SHORT|include short contents of page (for mkdox2 toc)
+flag|R|RECURSIVE|also list subfolders (for mkdox2 toc)
+flag|T|TREE|list as tree (for mkdox2 toc)
 flag|X|EXPORT|export to PDF (for mkdox2 build)
 option|l|log_dir|folder for log files |$HOME/log/$script_prefix
 option|t|tmp_dir|folder for temp files|/tmp/$script_prefix
 option|D|DOCKER|docker image to use|pforret/mkdox-zensical
 option|E|TITLE|set site title|
-option|H|HISTORY|days to take into account for mkdox recent|7
+option|H|HISTORY|days to take into account for mkdox2 recent|7
 option|L|LENGTH|max commit message length|99
 option|P|PORT|http port for serve|
 option|S|SECS|seconds to wait for launching a browser|5
@@ -215,9 +215,9 @@ function Script:main() {
           pushd "$folder" >/dev/null || exit
           if [[ "$folder" == *blog* ]]; then
             IO:debug "Blog folder detected — using date-sorted listing"
-            mkdox -R -Q toc . index.md
+            "$script_install_path" -R -Q toc . index.md
           else
-            mkdox -R -T toc . index.md
+            "$script_install_path" -R -T toc . index.md
           fi
           popd >/dev/null || exit
         done
@@ -627,9 +627,11 @@ function IO:debug() {
 }
 
 function IO:die() {
+  # exit status: the original status when called from the error trap, otherwise 1
+  local exit_code="${__trap_exit_code:-1}"
   IO:print "${txtError}${char_fail} $script_basename${txtReset}: $*" >&2
   tput bel
-  Script:exit
+  Script:exit "$exit_code"
 }
 
 function IO:alert() {
@@ -845,19 +847,20 @@ function Gha:finish() {
   timestamp=$(date -u)
   message="$timestamp < $script_basename $script_version"
   git add -A
-  git commit -m "${message}" || exit 0
+  git commit -m "${message}" || Script:exit 0
   git pull --rebase
   git push
-  exit 0
+  Script:exit 0
 }
 
-trap "IO:die \"ERROR \$? after \$SECONDS seconds \n\
+trap "__trap_exit_code=\$?; IO:die \"ERROR \$__trap_exit_code after \$SECONDS seconds \n\
 \${error_prefix} last command : '\$BASH_COMMAND' \" \
 \$(< \$script_install_path awk -v lineno=\$LINENO \
 'NR == lineno {print \"\${error_prefix} from line \" lineno \" : \" \$0}')" INT TERM EXIT
 # cf https://askubuntu.com/questions/513932/what-is-the-bash-command-variable-good-for
 
 Script:exit() {
+  # usage: Script:exit [status]  (default 0)
   local temp_file
   for temp_file in "${temp_files[@]-}"; do
     [[ -f "$temp_file" ]] && (
@@ -867,7 +870,7 @@ Script:exit() {
   done
   trap - INT TERM EXIT
   IO:debug "$script_basename finished after $SECONDS seconds"
-  exit 0
+  exit "${1:-0}"
 }
 
 Script:check_version() {

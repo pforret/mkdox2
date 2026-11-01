@@ -10,7 +10,8 @@ All core MkDocs Material features are supported:
 |-----------------------------------------------------------------------------|-----------|
 | Core (install, build, serve, file layout, Jinja templates, YAML metadata)   | Supported |
 | Languages (60+), header, announcement bar, footer, social links, copyright  | Supported |
-| Git repo integration, code actions, tags, revisioning, 404 pages            | Supported |
+| Git repo integration, code actions, tags, 404 pages                         | Supported |
+| Revision dates/authors from git (`git-revision-date-localized`, `git-*`)    | Planned (see plugins below) |
 | Color palettes, light/dark toggle, custom colors/schemes, fonts, icons      | Supported |
 | Social cards, favicons, custom assets, template overrides                   | Supported |
 | All 30+ Markdown extensions (admonitions, code blocks, Mermaid, math, etc.) | Supported |
@@ -29,25 +30,34 @@ Zensical uses **MiniJinja** instead of Jinja2. Key differences:
 
 ## Plugin Compatibility
 
-Third-party MkDocs plugins are **not loaded directly**. Instead, Zensical replaces the most common ones with built-in functionality:
+Zensical does not load MkDocs plugins. Instead it ships native implementations of about 30 of them,
+which accept the existing configuration. Plugins that are not on its supported list are **silently
+ignored**: installing their pip package (as `docker/Dockerfile` does) has no effect. Supported plugins
+reject unknown settings with a configuration error.
 
-| Plugin                        | Zensical Status                                                 |
-|-------------------------------|-----------------------------------------------------------------|
-| `mkdocstrings`                | Replaced by dedicated API documentation module (in development) |
-| `git-revision-date-localized` | Native built-in                                                 |
-| `git-authors`                 | Native built-in                                                 |
-| `git-committers`              | Native built-in                                                 |
-| `macros`                      | Replaced by built-in component system                           |
-| `minify`                      | Native minification + image compression                         |
-| `mike`                        | Native versioning with improved workflows                       |
-| `awesome-nav`                 | Native modular navigation                                       |
-| `literate-nav`                | Native modular navigation                                       |
-| `static-i18n`                 | Native internationalization                                     |
-| `blog` / `material/blog`      | Native built-in (port of the Material blog plugin)              |
-| `rss`                         | Native built-in ("Zensical RSS" feeds)                          |
-| `awesome-pages`               | Not supported: no effect, removed from the mkdox2 templates     |
+Full, current list: <https://zensical.org/docs/compatibility/mkdocs/plugins/>. Commonly asked about
+(status as of Zensical 0.0.74):
 
-Other plugins not listed above are **not loaded**: installing their pip package (as `docker/Dockerfile` does) has no effect.
+| Plugin                                  | Zensical status                                                     |
+|-----------------------------------------|---------------------------------------------------------------------|
+| `search`                                | Native (since 0.0.3), enabled by default                            |
+| `mkdocstrings`                          | Native (since 0.0.11); needs `pip install mkdocstrings-python`      |
+| `mike`                                  | Native (since 0.0.30); needs Zensical's compatible fork of mike     |
+| `macros`                                | Native (since 0.0.40)                                               |
+| `awesome-nav`, `literate-nav`, `meta`   | Native (since 0.0.58)                                               |
+| `minify`                                | Native (since 0.0.58); `minify_html` etc. default to false          |
+| `blog` / `material/blog`                | Native (since 0.0.64), port of the Material blog plugin             |
+| `rss`                                   | Native (since 0.0.65), "Zensical RSS" feeds                         |
+| `include-markdown`                      | Native (since 0.0.71), converted to `pymdownx.snippets`             |
+| `optimize` (image compression)          | In progress, not available yet                                      |
+| `git-revision-date-localized`           | **Planned**, not available yet                                      |
+| `git-authors`, `git-committers`         | **Planned**, not available yet                                      |
+| `gen-files`                             | Not supported: use `autoapi` or `api-autonav` instead               |
+| `open-in-new-tab`                       | Not supported: add its JavaScript with `extra_javascript`           |
+| `awesome-pages`                         | Not supported (not on the list): no effect, removed from the mkdox2 templates |
+| `static-i18n`                           | Not supported (not on the list)                                     |
+| `markdown-include` (Markdown extension) | Not loaded: `{!file.md!}` stays literal text; use `--8<--` snippets |
+
 Blog and RSS were checked on Zensical 0.0.74 with the `with_blog` template: index, posts, archive, category pages and RSS feeds are all generated natively.
 
 ### Plugins used in the mkdox2 templates (tested on Zensical 0.0.74)

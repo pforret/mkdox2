@@ -39,7 +39,7 @@ test_new_menu_lists_three_templates_in_order() {
 test_new_invalid_choice_creates_nothing() {
   local tmp
   tmp=$(mktemp -d)
-  # note: IO:die exits with status 0 (Script:exit), so check the message instead of the exit code
+  assert_status_code 1 "cd '$tmp' && printf '9\\n' | '$root_script' new demo" "invalid choice should exit with status 1"
   assert_equals 1 "$(cd "$tmp" && printf '9\n' | "$root_script" new demo 2>&1 | grep -c 'Invalid choice: 9')"
   assert "test ! -e '$tmp/demo'" "invalid choice should not create the project folder"
   rm -rf "$tmp"
@@ -48,7 +48,22 @@ test_new_invalid_choice_creates_nothing() {
 test_new_unknown_template_creates_nothing() {
   local tmp
   tmp=$(mktemp -d)
+  assert_status_code 1 "cd '$tmp' && '$root_script' -B nope new demo </dev/null" "unknown -B template should exit with status 1"
   assert_equals 1 "$(cd "$tmp" && "$root_script" -B nope new demo </dev/null 2>&1 | grep -c "Template 'nope' not found")"
   assert "test ! -e '$tmp/demo'" "unknown -B template should not create the project folder"
   rm -rf "$tmp"
 }
+
+test_build_without_config_fails() {
+  local tmp
+  tmp=$(mktemp -d)
+  mkdir "$tmp/docs" # without docs/, build stops earlier with "No 'docs' folder found"
+  assert_status_code 1 "cd '$tmp' && '$root_script' build </dev/null" "build without zensical.toml/mkdocs.yml should exit with status 1"
+  assert_equals 1 "$(cd "$tmp" && "$root_script" build </dev/null 2>&1 | grep -c 'No zensical.toml or mkdocs.yml found')"
+  rm -rf "$tmp"
+}
+
+test_usage_exits_with_status_0() {
+  assert_status_code 0 "'$root_script'" "usage screen should exit with status 0"
+}
+

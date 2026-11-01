@@ -17,3 +17,7 @@ One line each, newest last. Start a line with `path/to/file:` and the session-st
 - 2026-11-01 templates/*/zensical.toml: mermaid (superfences) still loads from unpkg; add 'unpkg.com/mermaid@*' to privacy assets_include to self-host it
 - 2026-11-01 mkdox2.sh: refuses to run as root ('CANNOT be root'); `act` runs workflow steps as root, so local act runs of bash_unit.yml fail while GitHub's non-root runner passes. Test with a non-root user in catthehacker/ubuntu:act-latest instead
 - 2026-11-01 .github/workflows/shellcheck.yml: catthehacker/ubuntu:act-latest has no shellcheck (GitHub's ubuntu-latest does); the workflow installs it when missing
+- 2026-11-01 mkdox2.sh: `build` checks for a docs/ folder ('No 'docs' folder found') before it checks for zensical.toml/mkdocs.yml
+- 2026-11-01 mkdox2.sh: never use a plain `exit`: it leaves the INT/TERM/EXIT trap active, which then runs IO:die; use `Script:exit <status>` (default 0)
+- 2026-11-01 docs/zensical/compatibility.md: the cited https://zensical.org/compatibility/ returns nothing usable to curl; use https://zensical.org/docs/compatibility/mkdocs/plugins/ for plugin status
+- 2026-11-01 mkdox2.sh: `toc -T` writes entries as '* [ ] &rarr;  [Title](path.md)' (a task-list checkbox plus one arrow per folder level)
